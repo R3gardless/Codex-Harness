@@ -20,14 +20,17 @@ Azure MCP 3.0.0, AWS 프록시 1.7.0을 사용합니다. Azure의 `latest` 태�
 
 1. 호스트에서 MCP와 해당 네트워크·작업이 허용되는지 확인합니다.
 2. `mcp/codex.toml`의 필요한 테이블을 지원되는 설정 위치에 병합합니다. 일반 Codex의
-   프로젝트 설정은 `.codex/config.toml`입니다. 관리형 환경에서는 제공된 MCP 설정
-   화면과 형식이 우선합니다. 기존 설정을 통째로 덮어쓰지 마세요.
+   프로젝트 설정은 `.codex/config.toml`이며 신뢰된 프로젝트에서만 로드됩니다.
+   관리형 환경에서는 제공된 MCP 설정 화면과 형식이 우선합니다. 기존 설정을 통째로 덮어쓰지 마세요.
 3. 해당 서버만 `enabled = true`로 바꿉니다. JSON을 요구하는 화면이라면
    `python3 scripts/export_mcp.py --server aws_knowledge`로 **선택한 서버 한 개만**
    내보낼 수 있습니다. Python 3.11 이상이 필요하며 `mcpServers` 형식의 예시입니다.
    화면의 스키마가 다르면 문서를 확인해 맞추세요. Codex 전용 timeout/도구 필터는
    이 JSON에 포함되지 않으며, 가져오면 서버가 활성화될 수 있습니다.
-4. 새 세션에서 `/mcp`로 도구 목록을 확인하고 공개 문서 질문 하나로 점검합니다.
+4. 새 세션에서 `/mcp`로 도구 목록을 확인합니다. 문서 서버는 공개 문서 질문 하나로
+   점검합니다. 리소스 서버는 실제 인증 계정·권한 범위를 먼저 확인한 뒤, 승인된 범위의
+   작은 조회 하나로 검증합니다. Azure는 선택한 구독의 리소스 그룹 조회처럼 범위를
+   지정하세요. 문서 응답만으로 클라우드 인증·리소스 접근을 검증했다고 판단하지 않습니다.
    일반 로컬 CLI의 등록 상태는 `codex mcp list`로 확인합니다.
 
 일반 로컬 환경에서 문서 서버 하나를 등록하는 예:
@@ -56,8 +59,10 @@ Vercel의 [web-design-guidelines](https://github.com/vercel-labs/agent-skills/tr
 ## AWS / Azure 리소스 연결
 
 AWS는 공식 관리형 AWS MCP와 SigV4 프록시를 사용합니다. `harness-readonly`는 직접
-준비해야 하는 프로필 이름이며 실제 계정 이름이 아닙니다. 서버 호출 권한과 조회 대상의
-최소 IAM 권한이 모두 필요합니다. `--read-only`는 도구의 읽기 전용 표시를 기준으로
+준비해야 하는 프로필 이름이며 실제 계정 이름이 아닙니다. 승인된 프로필이 있다면
+`--profile`의 값을 해당 이름으로 바꿉니다. 프리셋은 `AWS_MCP_PROXY_PROFILES`를 빈 값으로
+지정해 상속된 다중 프로필 설정이 `--profile`을 덮어쓰지 않게 합니다.
+서버 호출 권한과 조회 대상의 최소 IAM 권한이 모두 필요합니다. `--read-only`는 도구의 읽기 전용 표시를 기준으로
 필터링하므로 IAM을 대신하지 않습니다. 도구가 필터링되어 보이지 않으면 문서 연결로
 돌아가 원인을 확인하고, 해결하려고 읽기 제한을 해제하지 않습니다. AWS MCP와 Knowledge를
 모두 켜면 문서 도구가 겹칠 수 있어 목적에 맞는 하나를 선택하세요.
@@ -65,7 +70,9 @@ AWS는 공식 관리형 AWS MCP와 SigV4 프록시를 사용합니다. `harness-
 Azure는 `--read-only --mode namespace --namespace group`으로 시작합니다. 사용할
 계정·tenant·subscription과 권한 범위를 먼저 확인합니다. 다른 서비스가 필요할 때만
 공식 목록의 namespace를 추가하고, 비밀 조회가 가능한 `keyvault` 같은 영역은 기본
-범위에 넣지 않습니다. 읽기 전용은 정보 공개나 비용이 전혀 없다는 의미가 아닙니다.
+범위에 넣지 않습니다. `AZURE_MCP_COLLECT_TELEMETRY=false`로 선택적 telemetry를 끕니다.
+AWS 프록시도 `--disable-telemetry`를 사용합니다. 이는 서비스 요청 자체나 서비스 측
+감사 기록을 없애는 설정은 아닙니다. 읽기 전용은 정보 공개나 비용이 전혀 없다는 의미가 아닙니다.
 
 개인 클라우드 인증을 허용하지 않는 환경에서는 두 리소스 서버를 비활성 상태로
 유지하고 공개 문서 서버만 검토하세요. 리소스 생성, 배포, IAM 변경은 이 설정의 범위가
@@ -82,6 +89,8 @@ Azure는 `--read-only --mode namespace --namespace group`으로 시작합니다.
 - [AWS Knowledge](https://awslabs.github.io/mcp/servers/aws-knowledge-mcp-server)
 - [관리형 AWS MCP 설치](https://docs.aws.amazon.com/agent-toolkit/latest/userguide/getting-started-aws-mcp-server.html)
 - [AWS 프록시 옵션](https://github.com/aws/mcp-proxy-for-aws)
+- [AWS 프록시 1.7.0 프로필 우선순위](https://github.com/aws/mcp-proxy-for-aws/blob/v1.7.0/mcp_proxy_for_aws/server.py)
 - [Microsoft Learn MCP](https://learn.microsoft.com/en-us/training/support/mcp)
 - [Azure MCP 서버 옵션](https://learn.microsoft.com/en-us/azure/developer/azure-mcp-server/tools/)
 - [Azure MCP 공식 저장소](https://github.com/microsoft/mcp/tree/main/servers/Azure.Mcp.Server)
+- [Azure MCP 3.0.0 telemetry 설정](https://github.com/microsoft/mcp/blob/Azure.Mcp.Server-3.0.0/servers/Azure.Mcp.Server/README.md#telemetry-configuration)

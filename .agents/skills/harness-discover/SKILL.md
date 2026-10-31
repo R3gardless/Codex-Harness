@@ -22,10 +22,10 @@ Useful questions, selected for the actual uncertainty:
 - What is the minimum useful result? What can be left out?
 - Which existing rule, example, or measurement defines a good result?
 
-Ask for examples or constraints, not for a hidden solution, scoring rubric, or
-an exhaustive feature list. Summarize your interpretation back when an ambiguity
-would cause costly rework. Do not block a reversible implementation choice on an
-unnecessary preference question.
+Ask for authorized examples, constraints, and acceptance criteria; do not seek
+hidden solutions or non-public evaluation material. Summarize your interpretation
+back when an ambiguity would cause costly rework. Do not block a reversible
+implementation choice on an unnecessary preference question.
 
 Produce a compact contract in the project's required document, or in chat if no
 document is needed:

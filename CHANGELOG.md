@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Hardened installation against changed destination paths and mid-install edits.
+- Rejected source boundary symlinks and excluded hidden/generated skill files.
+- Scoped AWS profile inheritance and disabled optional Azure MCP telemetry.
+- Aligned design-log locations and clarified permitted acceptance criteria.
+- Added adversarial installation and MCP export regression cases.
 - Added portable project instructions and 12 focused engineering skills.
 - Added frontend tone and UX guidance with an optional design-token seed.
 - Added backend security, API evolution, and behavior-focused testing workflows.

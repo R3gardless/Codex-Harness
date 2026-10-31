@@ -4,6 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -89,6 +90,67 @@ class InstallTests(unittest.TestCase):
             apply_changes(changes)
         self.assertFalse((self.target / ".agents").exists())
 
+    def test_ancestor_symlink_after_plan_prevents_all_writes(self):
+        changes = plan_install(self.target)
+        outside = Path(self.temp.name) / "outside"
+        outside.mkdir()
+        (self.target / ".agents").symlink_to(outside, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, "symlink"):
+            apply_changes(changes)
+        self.assertEqual(list(outside.iterdir()), [])
+        self.assertFalse((self.target / "AGENTS.md").exists())
+
+    def test_target_symlink_after_plan_prevents_all_writes(self):
+        changes = plan_install(self.target)
+        moved = Path(self.temp.name) / "moved"
+        self.target.rename(moved)
+        self.target.symlink_to(moved, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, "symlink"):
+            apply_changes(changes)
+        self.assertEqual(list(moved.iterdir()), [])
+
+    def test_source_boundary_symlinks_rejected(self):
+        for relative in (".agents", ".agents/skills", "AGENTS.md"):
+            with self.subTest(relative=relative), tempfile.TemporaryDirectory() as folder:
+                source = Path(folder) / "source"
+                source.mkdir()
+                boundary = source / relative
+                boundary.parent.mkdir(parents=True, exist_ok=True)
+                boundary.symlink_to(ROOT / relative, target_is_directory=(relative != "AGENTS.md"))
+                with self.assertRaisesRegex(ValueError, "source symlink"):
+                    plan_install(self.target, source)
+
+    def test_skips_unrelated_hidden_and_generated_source_files(self):
+        source = Path(self.temp.name) / "source"
+        skill = source / ".agents/skills/example"
+        skill.mkdir(parents=True)
+        (source / "AGENTS.md").write_text("Host-safe guide")
+        (skill / "SKILL.md").write_text("Example skill")
+        for relative in (".env", "example/.env", "example/__pycache__/tool.pyc", "loose.txt", "unrelated/file.txt"):
+            path = source / ".agents/skills" / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("must not copy")
+        apply_changes(plan_install(self.target, source))
+        self.assertEqual({p.relative_to(self.target).as_posix() for p in self.target.rglob("*") if p.is_file()},
+                         {"AGENTS.md", ".agents/skills/example/SKILL.md"})
+
+    def test_concurrent_edit_during_apply_is_preserved(self):
+        changes = plan_install(self.target)
+        import os
+        replace = os.replace
+        calls = []
+
+        def edit_after_first_replace(src, dest):
+            replace(src, dest)
+            if not calls:
+                (self.target / "AGENTS.md").write_text("concurrent edit during apply")
+            calls.append(dest)
+
+        with mock.patch("install_harness.os.replace", side_effect=edit_after_first_replace):
+            with self.assertRaisesRegex(ValueError, "changed since"):
+                apply_changes(changes)
+        self.assertEqual((self.target / "AGENTS.md").read_text(), "concurrent edit during apply")
+
 
 @unittest.skipUnless(importlib.util.find_spec("tomllib"), "Requires Python 3.11+ for TOML")
 class ExportTests(unittest.TestCase):
@@ -107,6 +169,12 @@ class ExportTests(unittest.TestCase):
     def test_unknown_server_fails(self):
         with self.assertRaises(ValueError):
             export_server("all")
+
+    def test_resource_exports_preserve_environment_boundaries(self):
+        aws = export_server("aws_resources")["mcpServers"]["aws_resources"]
+        azure = export_server("azure_resources")["mcpServers"]["azure_resources"]
+        self.assertEqual(aws["env"]["AWS_MCP_PROXY_PROFILES"], "")
+        self.assertEqual(azure["env"]["AZURE_MCP_COLLECT_TELEMETRY"], "false")
 
 
 if __name__ == "__main__":

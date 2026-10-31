@@ -40,6 +40,8 @@ tool_timeout_sec = 45
 [mcp_servers.aws_resources]
 command = "uvx"
 args = ["mcp-proxy-for-aws-cli@1.7.0", "https://aws-mcp.us-east-1.api.aws/mcp", "--profile", "harness-readonly", "--region", "us-east-1", "--read-only", "--disable-telemetry"]
+# Prevent an inherited multi-profile setting from overriding --profile.
+env = { AWS_MCP_PROXY_PROFILES = "" }
 enabled = false
 startup_timeout_sec = 60
 tool_timeout_sec = 60
@@ -49,6 +51,7 @@ tool_timeout_sec = 60
 [mcp_servers.azure_resources]
 command = "npx"
 args = ["-y", "@azure/mcp@3.0.0", "server", "start", "--read-only", "--mode", "namespace", "--namespace", "group"]
+env = { AZURE_MCP_COLLECT_TELEMETRY = "false" }
 enabled = false
 startup_timeout_sec = 60
 tool_timeout_sec = 60

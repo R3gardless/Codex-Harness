@@ -44,8 +44,9 @@ HeroUI v3 문서용 MCP를 선택형으로 제공합니다. HeroUI Pro의 유료
 모바일 / 키보드 / 긴 텍스트 검증:
 ```
 
-확정된 내용만 `docs/DECISIONS.md`에 기록합니다. 처음 제안한 색이나 레이아웃은
-사용자에게 검토받지 않았다면 확정된 브랜드 요구로 표현하지 않습니다.
+확정된 내용만 프로젝트의 기존 ADR·설계 결정 기록에 남깁니다. 기존 관례가 없으면
+`docs/DESIGN_RATIONALE.md`를 사용합니다. 처음 제안한 색이나 레이아웃은 사용자에게
+검토받지 않았다면 확정된 브랜드 요구로 표현하지 않습니다.
 
 공식 참고: [Base UI](https://base-ui.com/react/overview/about),
 [HeroUI v3](https://heroui.com/en/docs/react/releases/v3-0-0),

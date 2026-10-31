@@ -11,14 +11,17 @@ END = "<!-- codex-harness:end -->"
 ROOT = Path(__file__).resolve().parents[1]
 
 
-@dataclass
+@dataclass(frozen=True)
 class Change:
     path: Path
     content: bytes
     before: object
+    target: Path
 
 
 def safe_destination(target, relative):
+    if target.is_symlink() or not target.is_dir() or target.resolve() != target:
+        raise ValueError(f"Target directory changed or became a symlink: {target}")
     path = target / relative
     current = target
     for part in relative.parts:
@@ -41,12 +44,19 @@ def plan_install(target, source=ROOT):
         raise ValueError("Keep the harness source outside the target project")
     changes = []
     skills = source / ".agents" / "skills"
+    for boundary in (source / ".agents", skills, source / "AGENTS.md"):
+        if boundary.is_symlink():
+            raise ValueError(f"Refusing source symlink: {boundary}")
     if not skills.is_dir() or not list(skills.glob("*/SKILL.md")):
         raise ValueError("No source skills found")
     for src in sorted(skills.rglob("*")):
+        relative = src.relative_to(skills)
+        if any(part.startswith(".") or part in {"__pycache__", "node_modules", "venv", "dist", "build"}
+               for part in relative.parts) or src.suffix in {".pyc", ".pyo"}:
+            continue
         if src.is_symlink():
             raise ValueError(f"Refusing source symlink: {src}")
-        if not src.is_file():
+        if len(relative.parts) < 2 or not (skills / relative.parts[0] / "SKILL.md").is_file() or not src.is_file():
             continue
         dest = safe_destination(target, src.relative_to(source))
         data = src.read_bytes()
@@ -54,7 +64,7 @@ def plan_install(target, source=ROOT):
         if before is not None and before != data:
             raise ValueError(f"Existing file differs; merge manually: {dest}")
         if before is None:
-            changes.append(Change(dest, data, None))
+            changes.append(Change(dest, data, None, target))
 
     dest = safe_destination(target, Path("AGENTS.md"))
     before = dest.read_bytes() if dest.exists() else None
@@ -64,7 +74,7 @@ def plan_install(target, source=ROOT):
              "this portable harness when they conflict.\n\n" + guide +
              "\n\n" + END + "\n").encode("utf-8")
     if before is None:
-        changes.append(Change(dest, block, None))
+        changes.append(Change(dest, block, None, target))
     else:
         start, end = START.encode(), END.encode()
         if start in before or end in before:
@@ -72,17 +82,23 @@ def plan_install(target, source=ROOT):
                 raise ValueError("Existing harness block differs or is malformed; merge manually")
         else:
             separator = b"\n\n" if before else b""
-            changes.append(Change(dest, before + separator + block, before))
+            changes.append(Change(dest, before + separator + block, before, target))
     return changes
+
+
+def verify_destination(change):
+    path = safe_destination(change.target, change.path.relative_to(change.target))
+    actual = path.read_bytes() if path.exists() else None
+    if actual != change.before:
+        raise ValueError(f"Destination changed since preview: {path}")
 
 
 def apply_changes(changes):
     # Verify every observed file again before starting writes.
     for change in changes:
-        actual = change.path.read_bytes() if change.path.exists() else None
-        if change.path.is_symlink() or actual != change.before:
-            raise ValueError(f"Destination changed since preview: {change.path}")
+        verify_destination(change)
     for change in changes:
+        verify_destination(change)
         change.path.parent.mkdir(parents=True, exist_ok=True)
         mode = change.path.stat().st_mode & 0o777 if change.path.exists() else 0o644
         fd, temporary = tempfile.mkstemp(prefix=".harness-", dir=change.path.parent)
@@ -90,6 +106,7 @@ def apply_changes(changes):
             with os.fdopen(fd, "wb") as stream:
                 stream.write(change.content)
             os.chmod(temporary, mode)
+            verify_destination(change)
             os.replace(temporary, change.path)
         finally:
             if os.path.exists(temporary):
