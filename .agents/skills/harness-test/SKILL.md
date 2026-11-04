@@ -9,6 +9,10 @@ Use the existing test runner, fixtures, and CI conventions. Identify observable
 requirements and failure risks before choosing cases. A small harness should
 provide one documented command, deterministic setup, isolated inputs/resources,
 clear exit status, and cleanup even after failure.
+Derive cases from the functional contract, including important alternative and
+exception flows. Assert both the response and final state/side effects, including
+absence of writes when an operation is rejected. Link scenario IDs when provided;
+document uncovered material cases rather than assuming the happy path covers them.
 
 Choose the cheapest layer that proves each claim:
 - Unit: domain rules, boundary conditions, transformations, and error mapping.

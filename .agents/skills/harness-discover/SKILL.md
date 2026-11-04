@@ -37,3 +37,8 @@ Use `confirmed`, `assumed`, or `open` for state. Add explicit non-goals and the
 smallest working slice. Reconcile contradictory requirements before dependent
 work. Stop discovery when the critical path and its acceptance checks are clear;
 leave low-impact unknowns as stated assumptions.
+
+Once the problem and scope are understood, use
+[harness-feature-design](../harness-feature-design/SKILL.md) when normal flows,
+business rules, state changes, or exception/recovery behavior still need design.
+Reuse the discovery contract; do not restart the same questions or duplicate it.

@@ -8,6 +8,9 @@ description: Verify an integrated software change against its requirements and p
 Use the confirmed acceptance criteria and required output contract. For each
 material criterion, find an implementation location and an observable check.
 Mark it passed, failed, or unverified based on evidence.
+Compare the feature specification's normal, alternative, and exception cases
+with the final behavior. Check affected documentation, examples, and recovery
+steps for consistency; keep open decisions and unverified claims explicit.
 
 Run the project's relevant checks with the current dependencies and documented
 commands. Distinguish a clean build from correct behavior. Cover the main flow,

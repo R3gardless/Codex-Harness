@@ -12,6 +12,10 @@ deliverable and available runtime; explain that choice briefly.
 
 Map one primary flow from input to domain logic to persistence/output and, if
 required, UI. Define success and a meaningful failure case before implementing.
+Use the existing feature specification and its acceptance cases. If material
+behavior is still undefined, use
+[harness-feature-design](../harness-feature-design/SKILL.md) for the missing
+rules, exceptions, and recovery behavior before coding those paths.
 Build this path first so integration failures appear early.
 
 - Before coding UI, use [harness-frontend](../harness-frontend/SKILL.md) to specify

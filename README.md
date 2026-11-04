@@ -9,6 +9,7 @@
 | --- | --- |
 | `AGENTS.md` | 범위, 구현, 검증, 환경, Git에 관한 공통 원칙 |
 | `.agents/skills/harness-discover` | 모호한 업무 요청을 요구사항과 검증 기준으로 변환 |
+| `.agents/skills/harness-feature-design` | 기능 명세, 정상·예외 흐름, 상태·복구, 검증 기준과 문서화 |
 | `.agents/skills/harness-build` | 기존 스택에서 작은 종단 기능 구현 |
 | `.agents/skills/harness-debug` | 재현 → 가설 → 수정 → 회귀 확인 |
 | `.agents/skills/harness-data-check` | 데이터 계약, 기준선, 누수, 지표 검증 |
@@ -50,7 +51,7 @@ python3 /path/to/Codex-harness/scripts/install_harness.py --target /path/to/proj
 
 첫 명령은 변경 예정 목록만 보여 줍니다. 두 번째 명령이 설치합니다.
 
-- `.agents/skills/`에 14개 스킬을 복사합니다.
+- `.agents/skills/`에 15개 스킬을 복사합니다.
 - `AGENTS.md`가 없으면 생성합니다. 기존 파일이 있으면 원문을 보존하고 하단에
   하네스 블록을 추가합니다. 기존 프로젝트 지침이 충돌 시 우선합니다.
 - 기존 스킬이나 설치 블록의 내용이 다르면 전체 적용을 시작하지 않고 중단합니다.
@@ -80,6 +81,7 @@ python3 /path/to/Codex-harness/scripts/install_harness.py --target /path/to/proj
 
 ```text
 $harness-discover 이 요청에서 구현 전에 확인할 업무 맥락과 성공 조건을 찾아 줘.
+$harness-feature-design 정상·예외 흐름과 상태·복구 방법을 설계하고 검증 가능한 기능 명세로 정리해 줘.
 $harness-build 확정한 핵심 흐름 하나를 기존 스택에서 끝까지 연결해 줘.
 $harness-debug 이 오류를 재현하고 원인을 확인한 뒤 최소 수정으로 고쳐 줘.
 $harness-data-check 이 데이터 처리의 기준선과 누수 가능성을 점검해 줘.
@@ -92,6 +94,12 @@ $harness-architecture-review 코드 흐름을 AI와 합의한 설계와 대조�
 ```
 
 ## 작업 방식
+
+기능 설계는 사용자·권한·입출력·업무 규칙과 정상·대안·예외 흐름을 정리합니다.
+예외마다 응답뿐 아니라 데이터 변경 여부, 안전한 재시도·복구 방법, 검증 기준을
+연결합니다. 기존 문서 양식을 우선하고 필요하면
+[기능 명세 템플릿](.agents/skills/harness-feature-design/assets/feature-spec.md)을 사용합니다.
+작은 변경은 변경점만 기록하며, 예시·실행법·코드와 테스트 링크를 실제 구현에 맞춰 유지합니다.
 
 모든 스킬을 한꺼번에 읽거나 매번 문서를 생성할 필요는 없습니다. 요구사항이 이미
 명확하면 바로 구현하고, 데이터 처리가 없다면 데이터 스킬을 생략합니다. 제한 시간이

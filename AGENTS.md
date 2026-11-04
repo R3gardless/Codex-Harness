@@ -14,6 +14,9 @@ this portable harness does not replace them. Reply in the user's language.
   answers or silently expand scope.
 - Define the smallest useful end-to-end outcome and observable acceptance checks.
   Preserve required interfaces, filenames, data formats, and existing behavior.
+- Before materially changing behavior, define actors, preconditions, normal and
+  exception flows, state changes, and recovery. Link important rules to acceptance
+  cases. Scale the specification to the change and keep unresolved choices visible.
 
 ## Build and verify
 
@@ -93,6 +96,10 @@ this portable harness does not replace them. Reply in the user's language.
   ADR log or `docs/DESIGN_RATIONALE.md`. Identify the decision owner; do not
   invent rationale or include unselected proposals. Keep release changes in
   `CHANGELOG.md` if used.
+- Keep feature documentation aligned with implementation: concrete examples,
+  behavior/error contracts, relevant code/test links, and explicit verification
+  status. Maintain one authoritative location per fact; update affected usage
+  and recovery instructions instead of duplicating the full design everywhere.
 
 ## Git and handoff
 
@@ -112,6 +119,7 @@ not every skill at startup.
 | Situation | Skill |
 | --- | --- |
 | Ambiguous business request or missing acceptance criteria | `harness-discover` |
+| Specify functional behavior, exceptions, recovery, and acceptance cases | `harness-feature-design` |
 | Implement a scoped feature through a working vertical slice | `harness-build` |
 | Reproduce and fix a failure or regression | `harness-debug` |
 | Data transformations, ranking, retrieval, or model evaluation | `harness-data-check` |

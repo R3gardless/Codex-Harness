@@ -41,8 +41,12 @@ class InstallTests(unittest.TestCase):
         installed = {p.parent.name: p.read_bytes()
                      for p in (self.target / ".agents/skills").glob("harness-*/SKILL.md")}
         self.assertEqual(installed, expected)
-        token_path = Path(".agents/skills/harness-frontend/assets/tokens.css")
-        self.assertEqual((self.target / token_path).read_bytes(), (ROOT / token_path).read_bytes())
+        for relative in ("harness-frontend/assets/tokens.css",
+                         "harness-feature-design/assets/feature-spec.md"):
+            with self.subTest(asset=relative):
+                asset_path = Path(".agents/skills") / relative
+                self.assertEqual((self.target / asset_path).read_bytes(),
+                                 (ROOT / asset_path).read_bytes())
 
     def test_reinstall_is_noop(self):
         apply_changes(plan_install(self.target))
