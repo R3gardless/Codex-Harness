@@ -1,4 +1,6 @@
-/* Optional light-theme seed. Adapt to the product and test rendered contrast. */
+/* Optional light/dark seed. Adapt to the product and test rendered contrast.
+   On <html>, set data-theme="light" or "dark" for an explicit preference;
+   remove data-theme for the system preference. Persistence/SSR belong to the app. */
 :root {
   color-scheme: light;
   --color-bg: #f7f8fa;
@@ -27,6 +29,39 @@
   --radius-panel: 0.875rem;
   --shadow-panel: 0 2px 10px rgb(23 32 46 / 5%);
   --content-width: 72rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg: #101722;
+    --color-surface: #182231;
+    --color-text: #e5eaf2;
+    --color-text-muted: #a9b5c7;
+    --color-border: #48566b;
+    --color-accent: #5eead4;
+    --color-accent-hover: #99f6e4;
+    --color-on-accent: #10201e;
+    --color-danger: #fda29b;
+    --color-focus: #93c5fd;
+    --shadow-panel: 0 2px 10px rgb(0 0 0 / 24%);
+  }
+}
+
+/* Keep explicit dark mode available even when the OS uses light mode. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #101722;
+  --color-surface: #182231;
+  --color-text: #e5eaf2;
+  --color-text-muted: #a9b5c7;
+  --color-border: #48566b;
+  --color-accent: #5eead4;
+  --color-accent-hover: #99f6e4;
+  --color-on-accent: #10201e;
+  --color-danger: #fda29b;
+  --color-focus: #93c5fd;
+  --shadow-panel: 0 2px 10px rgb(0 0 0 / 24%);
 }
 
 /* Apply focus to real interactive elements; do not remove browser fallbacks. */

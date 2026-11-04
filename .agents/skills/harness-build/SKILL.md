@@ -14,14 +14,18 @@ Map one primary flow from input to domain logic to persistence/output and, if
 required, UI. Define success and a meaningful failure case before implementing.
 Build this path first so integration failures appear early.
 
+- Before coding UI, use [harness-frontend](../harness-frontend/SKILL.md) to specify
+  tone, task flow, layout, and states. Include light/dark themes and responsive
+  mobile/tablet/desktop behavior in the slice unless host requirements differ.
+- For backend work, use [harness-backend](../harness-backend/SKILL.md) to separate
+  API, DTO, service, and infrastructure/DB responsibilities. If persistence or
+  runtime setup is required, use [harness-infra](../harness-infra/SKILL.md) for
+  configuration, migrations, and a verified isolated DB path.
 - Keep domain rules explicit and testable. Validate at input boundaries.
 - Add persistence, authentication, concurrency, caching, or external services only
   when the requirements justify them. Do not build hypothetical future workloads.
 - Use real provided data for the real flow; label fixtures and simulated behavior.
   Do not substitute a mock for a required integration and claim it is complete.
-- For UI work, include meaningful empty, loading, error, and success states where
-  applicable, readable labels, keyboard operation, and a layout that fits the
-  intended screen. Avoid decorative work that delays the core flow.
 - For a managed preview, check its documented bind address and actual port.
   Use `0.0.0.0` only when that environment requires it. Do not create a public
   tunnel. Give the user the port/path and manual interaction steps.

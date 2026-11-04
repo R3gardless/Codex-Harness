@@ -14,8 +14,10 @@
 | `.agents/skills/harness-data-check` | 데이터 계약, 기준선, 누수, 지표 검증 |
 | `.agents/skills/harness-verify` | 통합 결과와 실행·전달 조건 확인 |
 | `.agents/skills/harness-explain` | 실제 코드와 선택 이유를 설명 |
-| `.agents/skills/harness-frontend` | 모던한 톤앤매너, UX, 접근성, 반응형 UI |
-| `.agents/skills/harness-backend` | 보안, API 계약, 호환성, 확장 경계 |
+| `.agents/skills/harness-frontend` | 톤앤매너·UI/UX 선행 설계, 다크모드, 접근성, 반응형 UI |
+| `.agents/skills/harness-backend` | API·DTO·services 분리, 보안·계약, infra·DB 경계 |
+| `.agents/skills/harness-infra` | 별도 infra·DB 구성, 어댑터, 마이그레이션, 복구 검증 |
+| `.agents/skills/harness-architecture-review` | 코드 로직 흐름, AI 대화 설계 대조, 최적화·인프라 이슈 검토 |
 | `.agents/skills/harness-test` | 단위·계약·통합 테스트와 재현 가능한 테스트 하네스 |
 | `.agents/skills/harness-ideate` | 공개 API·OSS·enterprise 기능 조사와 아이디어 설계 |
 | `.agents/skills/harness-design-rationale` | AI 대화에서 확정된 설계와 실제로 언급된 이유만 기록 |
@@ -48,7 +50,7 @@ python3 /path/to/Codex-harness/scripts/install_harness.py --target /path/to/proj
 
 첫 명령은 변경 예정 목록만 보여 줍니다. 두 번째 명령이 설치합니다.
 
-- `.agents/skills/`에 12개 스킬을 복사합니다.
+- `.agents/skills/`에 14개 스킬을 복사합니다.
 - `AGENTS.md`가 없으면 생성합니다. 기존 파일이 있으면 원문을 보존하고 하단에
   하네스 블록을 추가합니다. 기존 프로젝트 지침이 충돌 시 우선합니다.
 - 기존 스킬이나 설치 블록의 내용이 다르면 전체 적용을 시작하지 않고 중단합니다.
@@ -83,6 +85,10 @@ $harness-debug 이 오류를 재현하고 원인을 확인한 뒤 최소 수정�
 $harness-data-check 이 데이터 처리의 기준선과 누수 가능성을 점검해 줘.
 $harness-verify 필수조건별 구현 위치와 실제 검증 결과를 대조해 줘.
 $harness-explain 실제 코드 흐름과 구조 선택 이유, 실패 조건을 설명해 줘.
+$harness-frontend 톤앤매너와 화면 흐름을 먼저 설계하고 다크모드·반응형으로 구현해 줘.
+$harness-backend API·DTO·services를 분리하고 infra/DB 어댑터까지 핵심 요청을 연결해 줘.
+$harness-infra 기존 DB 스택으로 연결·마이그레이션·격리 테스트 환경을 구축해 줘.
+$harness-architecture-review 코드 흐름을 AI와 합의한 설계와 대조하고 최적화·인프라 이슈를 근거와 함께 검토해 줘.
 ```
 
 ## 작업 방식
@@ -90,6 +96,23 @@ $harness-explain 실제 코드 흐름과 구조 선택 이유, 실패 조건을 
 모든 스킬을 한꺼번에 읽거나 매번 문서를 생성할 필요는 없습니다. 요구사항이 이미
 명확하면 바로 구현하고, 데이터 처리가 없다면 데이터 스킬을 생략합니다. 제한 시간이
 있으면 핵심 흐름을 먼저 실행하고 마무리 검증·설명에 시간을 남깁니다.
+
+FE는 코딩 전에 짧은 디자인 브리프로 톤앤매너, 정보 위계, 사용자 흐름, 화면 구성,
+상태를 정합니다. 기본 지원 범위는 라이트·다크·시스템 테마와 모바일·태블릿·데스크톱
+반응형입니다. 기존 브랜드와 프로젝트 요구를 우선하며, 작은 수정은 기존 설계의 변경점만
+정리합니다. [토큰 시드](.agents/skills/harness-frontend/assets/tokens.css)는 두 팔레트와
+OS 테마 대응을 제공하고, 사용자 선택·저장·초기 렌더링 처리는 앱의 기존 방식으로 구현합니다.
+
+BE는 `api/`, `dto/`, `services/`, `infra/`, `infra/db/` 또는 기존 프로젝트의 대응 모듈로
+책임을 나눕니다. API는 요청·응답, DTO는 입출력 계약, services는 업무 규칙과 권한,
+infra는 외부 어댑터와 설정, DB 계층은 연결·쿼리·마이그레이션을 담당합니다. 필요한
+인프라·DB 경로를 실제로 구성하고 검증하되 별도 배포나 마이크로서비스를 강제하지 않습니다.
+
+설계 검토는 실제 파일·함수로 로직 흐름을 추적하고, 확인 가능한 AI 대화의 결정과
+구현을 대조합니다. 적용된 최적화와 개선 후보, 확인된 결함과 조건부 인프라 위험을
+구분하고 검증 방법을 제시합니다. 대화가 없으면 과거 의도를 알 수 없다고 표시합니다.
+확정된 결정만 `harness-design-rationale`로 기록하며, 검토 요청 자체는 코드 수정이나
+클라우드 리소스 변경 권한을 뜻하지 않습니다.
 
 자동 브라우저 조작이나 외부 API 연결 없이 터미널 중심으로 사용할 수 있습니다.
 화면은 허용된 미리보기에서 사용자가 직접 확인하며, 확인하지 않은 부분은 미검증으로
@@ -104,6 +127,8 @@ MCP는 [설정 안내](docs/MCP.md)를 보고 필요한 서버만 선택하세�
 단일·서브 에이전트의 토큰 비용과 위임 기준은
 [토큰·에이전트 운영](docs/TOKEN_AND_AGENTS.md), Base UI·HeroUI 선택과 톤앤매너는
 [UI 방향](docs/UI_DIRECTION.md)에 정리했습니다.
+실행·응답 대기를 포함한 위임 판단과 검증·문서 작성·제출 시간 확보도 AI 활용 역량의
+기준으로 다룹니다. 마감과 관측한 지연을 기준으로 배분하며 고정 시간표를 강제하지 않습니다.
 
 Git 커밋이 허용된 작업에서는 기존 사용자 작성자와 서명 설정을 사용합니다.
 AI 공동 작성자 표기는 자동 추가하지 않습니다. 실제 AI 사용과 검증 기록은 사실대로

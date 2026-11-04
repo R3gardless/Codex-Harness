@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Required a frontend design brief before UI implementation, with dark mode and responsive verification.
+- Extended the optional token seed with system and explicit light/dark themes.
+- Defined API, DTO, service, infrastructure, and DB layer responsibilities.
+- Added infrastructure/DB setup and code-grounded architecture review skills (14 total).
+- Connected code flows, conversation decisions, measured optimization, and operational risk review.
+- Added latency-aware delegation budgets that reserve verification, documentation, and submission time.
 - Hardened installation against changed destination paths and mid-install edits.
 - Rejected source boundary symlinks and excluded hidden/generated skill files.
 - Scoped AWS profile inheritance and disabled optional Azure MCP telemetry.

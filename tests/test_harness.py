@@ -36,7 +36,13 @@ class InstallTests(unittest.TestCase):
         self.assertTrue(result.startswith(original))
         self.assertEqual(result.count(START.encode()), 1)
         self.assertEqual(other.read_text(), "existing custom skill")
-        self.assertEqual(len(list((self.target / ".agents/skills").glob("harness-*/SKILL.md"))), 12)
+        expected = {p.parent.name: p.read_bytes()
+                    for p in (ROOT / ".agents/skills").glob("harness-*/SKILL.md")}
+        installed = {p.parent.name: p.read_bytes()
+                     for p in (self.target / ".agents/skills").glob("harness-*/SKILL.md")}
+        self.assertEqual(installed, expected)
+        token_path = Path(".agents/skills/harness-frontend/assets/tokens.css")
+        self.assertEqual((self.target / token_path).read_bytes(), (ROOT / token_path).read_bytes())
 
     def test_reinstall_is_noop(self):
         apply_changes(plan_install(self.target))

@@ -7,6 +7,11 @@ description: Explain the actual implementation, design tradeoffs, evidence, and 
 
 Trace one real request or data item through the implementation. Link the relevant
 files/functions and distinguish intended behavior from verified behavior.
+Include the relevant failure branches and side effects; use a compact flow or
+sequence diagram when it clarifies the logic. If the request also compares AI-user
+design decisions, optimization, or infrastructure risks, use
+[harness-architecture-review](../harness-architecture-review/SKILL.md). Keep a
+simple walkthrough scoped to the requested implementation.
 
 Explain the few decisions that matter: requirement, chosen approach, why it fits,
 one credible alternative if useful, and the cost or failure mode accepted.

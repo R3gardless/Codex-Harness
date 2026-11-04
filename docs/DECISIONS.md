@@ -19,6 +19,10 @@
 | D012 | MCP 패키지 버전 고정, Azure는 안정 버전 사용 | 확인한 Azure `latest` 태그가 베타라 안정 버전과 재현 가능한 선택자를 사용 | 구현 담당 AI | `mcp/codex.toml`, `docs/MCP.md` |
 | D013 | 기존 프로젝트 파일을 보존하고 설치 충돌 시 적용 전 중단 | 다른 프로젝트에 가져갈 하네스가 기존 지침과 작업을 덮어쓰지 않도록 선택 | 구현 담당 AI | `scripts/install_harness.py`, `tests/test_harness.py` |
 | D014 | 사용자 Git 작성자만 사용하고 AI 공동 작성자 표기 제외 | 사용자 작성자만 사용해 커밋·푸시하라는 명시 요청 | 사용자 | `AGENTS.md`, 저장소 로컬 Git 설정 |
+| D015 | FE 구현 전 톤앤매너·UI/UX를 설계하고 다크모드·반응형을 지원 | 명시 요구, 별도 이유는 기록되지 않음 | 사용자 | `AGENTS.md`, `harness-frontend`, `harness-build`, `harness-verify`, `docs/UI_DIRECTION.md` |
+| D016 | BE의 services·DTO·API 책임을 분리하고 infra·DB 계층을 별도로 구축 | 명시 요구, 별도 이유는 기록되지 않음 | 사용자 | `AGENTS.md`, `harness-backend`, `harness-infra` |
+| D017 | 실제 코드 로직 흐름과 AI 대화의 설계 내용, 최적화, 발생 가능한 인프라 이슈를 다루는 스킬 추가 | 명시 요구, 별도 이유는 기록되지 않음 | 사용자 | `harness-architecture-review`, `harness-explain` |
+| D018 | 에이전트 실행·응답시간을 반영해 위임·결과 검증·문서 작성·제출 시간을 배분 | 응답시간을 고려한 위임과 시간 안배도 AI 활용 역량의 일부라는 평가 기준 | 사용자 | `AGENTS.md`, `harness-context`, `harness-verify`, `docs/TOKEN_AND_AGENTS.md`, `docs/MODEL_STRATEGY.md` |
 
 D004의 라이브러리 선택은 하네스의 기본 제안이며 특정 제품의 브랜드나 테마가 확정됐다는
 뜻은 아닙니다. D011의 읽기 제한은 IAM/RBAC를 대체하지 않습니다. 실제 AI 사용·테스트

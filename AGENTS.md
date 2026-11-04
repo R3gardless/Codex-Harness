@@ -53,19 +53,39 @@ this portable harness does not replace them. Reply in the user's language.
 - Work with one agent by default. Delegate only when explicitly authorized, the
   environment supports it, and there is an independent bounded task. State its
   acceptance check and integration owner; avoid concurrent edits to shared files.
-- When a deadline exists, reserve time for integration, verification, and handoff.
-  Cut optional scope before core correctness. Repeated failure needs a revised
+  Include agent startup, execution/response latency, clarification, result review,
+  and integration in the delegation estimate. Delegate only when the result can
+  return early enough to be checked and used; agent count is not a success metric.
+- When a deadline exists, allocate time for agent work, result verification,
+  documentation, and submission, including integration and a recovery buffer.
+  Set a latest useful return time for delegated work. Use observed durations or
+  labeled estimates and rebalance at checkpoints; stop optional work before it
+  consumes verification or delivery time. Latency-aware delegation and scheduling
+  are part of competent AI use. Do not invent a deadline when none was given.
+- Cut optional scope before core correctness. Repeated failure needs a revised
   hypothesis, not another identical run. Leave long-running servers in known
   sessions and do not kill unrelated processes.
 
 ## Engineering quality
 
-- UI work needs a coherent tone, clear hierarchy, usable states, accessibility,
-  and responsive behavior. Choose a small consistent token/component system;
-  modern styling must support the user's main task.
+- Before UI implementation, specify tone and manner, information hierarchy,
+  user flows, screen layout, and interaction states in a short design brief.
+  Use consistent tokens/components, accessible interactions, light/dark themes,
+  and responsive mobile/tablet/desktop layouts. Verify both themes and relevant
+  viewport sizes; follow explicit host requirements when they differ.
 - API work needs explicit input/output/error contracts, server-side authorization,
-  validation, and persistence boundaries. Plan compatible extensions and bounded
-  resource use; add infrastructure only for a demonstrated requirement.
+  validation, and persistence boundaries. Separate `api`, `dto`, and `services`
+  responsibilities from `infra` adapters and the DB layer. Keep business logic
+  out of handlers and DB access out of API/DTO modules; map these boundaries to
+  existing project conventions instead of forcing a rewrite.
+- Build required infrastructure and DB support separately: configuration,
+  connections, migrations, constraints, and operational recovery. Verify a real
+  isolated persistence path. Use the existing stack and add infrastructure only
+  for demonstrated requirements; cloud provisioning needs task authorization.
+- Ground design reviews in code paths and available AI-user conversations. Trace
+  logic and failure flows, distinguish agreed design from actual implementation,
+  and assess optimization and infrastructure risks with evidence. Label inferred
+  reasons, unmeasured improvements, and conditional risks explicitly.
 - New or changed behavior needs meaningful tests at the right layer. Include
   regression evidence for bugs and integration evidence for important boundaries.
   A build passing is not evidence of secure or correct behavior.
@@ -97,8 +117,10 @@ not every skill at startup.
 | Data transformations, ranking, retrieval, or model evaluation | `harness-data-check` |
 | Validate an integrated change and prepare delivery | `harness-verify` |
 | Explain an implementation or prepare a factual handoff | `harness-explain` |
-| Design or improve a frontend experience | `harness-frontend` |
-| Design secure APIs and evolvable backend boundaries | `harness-backend` |
+| Plan UI/UX and implement tone, dark mode, and responsive screens | `harness-frontend` |
+| Separate API, DTO, service, and persistence responsibilities | `harness-backend` |
+| Build infrastructure adapters, DB setup, migrations, and recovery | `harness-infra` |
+| Review code flow, conversation decisions, optimization, and operational risks | `harness-architecture-review` |
 | Build a meaningful test harness or regression suite | `harness-test` |
 | Explore a theme using public APIs, enterprise features, or OSS | `harness-ideate` |
 | Extract decided designs and stated reasons from the conversation | `harness-design-rationale` |
