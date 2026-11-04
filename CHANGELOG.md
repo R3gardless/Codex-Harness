@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Documented small, cohesive development commits with explicit, concise messages.
 - Consolidated workflow rules under their owning skills and shortened repeated guidance.
 - Added functional specifications, exception/recovery cases, and a reusable feature documentation template (15 skills total).
 - Required a frontend design brief before UI implementation, with dark mode and responsive verification.

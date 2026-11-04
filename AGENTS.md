@@ -101,6 +101,13 @@ this portable harness does not replace them. Reply in the user's language.
   Use the user's configured author/committer; add no AI co-author or generated-by
   trailer. Preserve existing signing configuration. Never invent a signing key.
   This attribution preference does not justify misrepresenting AI assistance.
+- When commits are authorized, record development in small, cohesive commits,
+  each covering one feature, fix, or refactor with its relevant tests and docs.
+  Keep each commit usable and reviewable; separate unrelated work without splitting
+  tightly coupled changes into broken intermediate states.
+- Write explicit, concise commit subjects naming the action and affected behavior.
+  Follow repository conventions; avoid vague subjects such as `Update files`.
+  Add a body only when the reason, tradeoff, or migration needs explanation.
 - Before handoff, inspect the diff and required files. Explain what works, how to
   run it, evidence, important design choices, and remaining limits. Distinguish
   implementation, verification, and delivery status.
