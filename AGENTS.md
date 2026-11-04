@@ -71,24 +71,18 @@ this portable harness does not replace them. Reply in the user's language.
 
 ## Engineering quality
 
-- Before UI implementation, specify tone and manner, information hierarchy,
-  user flows, screen layout, and interaction states in a short design brief.
-  Use consistent tokens/components, accessible interactions, light/dark themes,
-  and responsive mobile/tablet/desktop layouts. Verify both themes and relevant
-  viewport sizes; follow explicit host requirements when they differ.
-- API work needs explicit input/output/error contracts, server-side authorization,
-  validation, and persistence boundaries. Separate `api`, `dto`, and `services`
-  responsibilities from `infra` adapters and the DB layer. Keep business logic
-  out of handlers and DB access out of API/DTO modules; map these boundaries to
-  existing project conventions instead of forcing a rewrite.
-- Build required infrastructure and DB support separately: configuration,
-  connections, migrations, constraints, and operational recovery. Verify a real
-  isolated persistence path. Use the existing stack and add infrastructure only
-  for demonstrated requirements; cloud provisioning needs task authorization.
-- Ground design reviews in code paths and available AI-user conversations. Trace
-  logic and failure flows, distinguish agreed design from actual implementation,
-  and assess optimization and infrastructure risks with evidence. Label inferred
-  reasons, unmeasured improvements, and conditional risks explicitly.
+- Design UI tone, hierarchy, flows, layout, and states before implementation.
+  Use accessible tokens/components, light/dark themes, and responsive mobile,
+  tablet, and desktop layouts; verify the agreed theme/viewport combinations.
+- Define API contracts, validation, and server-side authorization. Separate `api`,
+  `dto`, `services`, and `infra`/DB responsibilities using existing conventions;
+  keep business logic out of handlers and DB access out of API/DTO modules.
+- Build required infrastructure/DB configuration, migrations, and recovery paths
+  separately and verify isolated persistence. Add infrastructure for demonstrated
+  requirements; live provisioning needs task authorization.
+- Ground design reviews in actual code and available AI-user decisions. Trace
+  logic/failures and assess optimization/infra risks; label inferred reasons,
+  unmeasured benefits, and conditional risks explicitly.
 - New or changed behavior needs meaningful tests at the right layer. Include
   regression evidence for bugs and integration evidence for important boundaries.
   A build passing is not evidence of secure or correct behavior.
@@ -114,7 +108,9 @@ this portable harness does not replace them. Reply in the user's language.
 ## Skill routing
 
 Skills live in `.agents/skills/`. Read the matching `SKILL.md` when applicable,
-not every skill at startup.
+not every skill at startup. Shared constraints belong here; detailed workflows
+belong to their owning skill. Reuse contracts and evidence between stages instead
+of repeating discovery or creating parallel documents. Skip satisfied stages.
 
 | Situation | Skill |
 | --- | --- |

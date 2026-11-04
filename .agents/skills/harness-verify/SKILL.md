@@ -5,31 +5,26 @@ description: Verify an integrated software change against its requirements and p
 
 # Verify the delivered behavior
 
-Use the confirmed acceptance criteria and required output contract. For each
-material criterion, find an implementation location and an observable check.
-Mark it passed, failed, or unverified based on evidence.
-Compare the feature specification's normal, alternative, and exception cases
-with the final behavior. Check affected documentation, examples, and recovery
-steps for consistency; keep open decisions and unverified claims explicit.
+Reconcile the existing feature contract with the final implementation: for each
+material normal, alternative, or exception case, link its code and observable
+check and mark it passed, failed, or unverified. Check affected documentation,
+examples, and recovery steps against the same contract; keep open decisions visible.
 
 Run the project's relevant checks with the current dependencies and documented
 commands. Distinguish a clean build from correct behavior. Cover the main flow,
 important invalid input, and persistence/restart behavior if promised. Test only
 risks relevant to the change; do not invent a broad audit project.
 
-For UI work, verify server readiness and available automated non-GUI checks.
-Provide exact manual preview actions and expected results when GUI automation is
-not available or not permitted. Do not report visual or interactive checks as
-passed unless they were actually observed or the user confirmed them.
-Cover the agreed tone/UI flow, light/dark/system selection and persistence, and
-mobile/tablet/desktop layouts. Check relevant loading/error/empty states, keyboard
-focus, contrast, and overflow across themes; explicitly scope any unverified cells.
+For UI, verify readiness and the applicable automated checks, then use the agreed
+theme/viewport/state matrix from [harness-frontend](../harness-frontend/SKILL.md).
+When GUI automation is unavailable or prohibited, provide manual actions and
+expected results. Report visual/interactive checks as passed only when observed
+or confirmed by the user; identify the remaining unverified combinations.
 
-For backend/infrastructure changes, trace one request through API/DTO, services,
-and the DB/external adapter. Check layer responsibilities, authorization, response
-field boundaries, migrations, and material transaction/failure behavior against
-an isolated persistence environment. Match operational claims to actual evidence;
-configuration files alone do not prove deployment, recovery, or capacity.
+For backend/infra, trace the changed request across the agreed layer boundaries.
+Reconcile API/authorization and isolated DB/migration evidence from the relevant
+implementation checks. Configuration alone does not prove deployment, recovery,
+or capacity; match operational claims to observed results.
 
 Inspect the final diff, filenames, required documents, dependency lockfile, and
 startup instructions. Check that credentials and private inputs are not included

@@ -25,23 +25,16 @@ is not evidence that it passed; record executed commands and results separately.
 
 ## Compare implementation with the design conversation
 
-Extract only decisions supported by the available AI-user exchange or existing
-decision log. Attribute each to the user or the implementing agent and retain its
-stated reason. If the conversation is unavailable, continue the code review but
-mark historical intent unknown; never reconstruct agreement from code alone.
+Use available decisions and their attributed sources. For each material choice,
+link its implementation and mark it matched, different, or unresolved. Without
+conversation/decision evidence, historical intent remains unknown. A mismatch is
+a finding, not permission to alter code or rewrite history.
 
-For material decisions, show the decision/source, implementation pointer, and
-whether code matches, differs, or is unresolved. A mismatch is a review finding,
-not permission to silently alter the code or rewrite a prior decision. Separate
-new proposals and inferred explanations from settled choices. Ask focused
-questions about differences that change behavior or architecture, and continue
-independent analysis while waiting. Do not invent the user's answer or approval.
-
-When the user settles a choice, capture it through
-[harness-design-rationale](../harness-design-rationale/SKILL.md) in the existing
-decision log. Keep open issues and candidate optimizations in the review, not in
-the decision-only log. An explanation request can end with stated uncertainties;
-it does not require a mandatory interview or a claim that the user understands.
+Use [harness-design-rationale](../harness-design-rationale/SKILL.md) to extract or
+record settled choices and stated reasons; keep proposals, inferred explanations,
+and open issues in the review. Ask only about differences affecting behavior or
+architecture and continue independent analysis while waiting. Do not invent the
+user's answer or require an interview to complete an explanatory review.
 
 ## Evaluate optimization with evidence
 

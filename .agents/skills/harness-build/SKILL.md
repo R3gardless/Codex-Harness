@@ -10,21 +10,16 @@ closest existing feature. Do not replace the project's stack to fit a template.
 If the project is empty, choose the smallest stack that satisfies the actual
 deliverable and available runtime; explain that choice briefly.
 
-Map one primary flow from input to domain logic to persistence/output and, if
-required, UI. Define success and a meaningful failure case before implementing.
-Use the existing feature specification and its acceptance cases. If material
-behavior is still undefined, use
-[harness-feature-design](../harness-feature-design/SKILL.md) for the missing
-rules, exceptions, and recovery behavior before coding those paths.
-Build this path first so integration failures appear early.
+Use the existing feature contract to connect one primary flow from input through
+domain logic to persistence/output and any required UI. Implement its success
+and material failure cases first. If behavior is still undefined, use
+[harness-feature-design](../harness-feature-design/SKILL.md) only for the missing
+rules; preserve already settled decisions and acceptance cases.
 
-- Before coding UI, use [harness-frontend](../harness-frontend/SKILL.md) to specify
-  tone, task flow, layout, and states. Include light/dark themes and responsive
-  mobile/tablet/desktop behavior in the slice unless host requirements differ.
-- For backend work, use [harness-backend](../harness-backend/SKILL.md) to separate
-  API, DTO, service, and infrastructure/DB responsibilities. If persistence or
-  runtime setup is required, use [harness-infra](../harness-infra/SKILL.md) for
-  configuration, migrations, and a verified isolated DB path.
+- Apply [harness-frontend](../harness-frontend/SKILL.md) for UI design and behavior,
+  [harness-backend](../harness-backend/SKILL.md) for API/service boundaries, and
+  [harness-infra](../harness-infra/SKILL.md) when persistence/runtime setup changes.
+  Load only the relevant workflow; keep its detailed rules in that skill.
 - Keep domain rules explicit and testable. Validate at input boundaries.
 - Add persistence, authentication, concurrency, caching, or external services only
   when the requirements justify them. Do not build hypothetical future workloads.
@@ -39,6 +34,5 @@ result. If required behavior cannot be completed, preserve the last working
 slice and identify the specific gap. New evidence can change the plan; record
 the reason rather than silently adding features.
 
-For longer tasks, keep a short checkpoint with completed behavior, next step,
-changed files, known issue, and useful commands. Existing project documentation
-takes precedence over creating a parallel set of files.
+For longer tasks, update the existing work note with progress, next action, and
+verification evidence; use `harness-context` when a continuation checkpoint is needed.

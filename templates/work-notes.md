@@ -2,6 +2,8 @@
 
 Use the project's required document instead when one exists. Keep only sections
 that help the current task. Replace prompts with actual evidence; do not invent it.
+Link to an existing feature specification for detailed behavior and exception
+cases instead of copying that specification into this progress note.
 
 ## Goal and scope
 

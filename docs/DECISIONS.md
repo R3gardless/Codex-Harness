@@ -24,6 +24,7 @@
 | D017 | 실제 코드 로직 흐름과 AI 대화의 설계 내용, 최적화, 발생 가능한 인프라 이슈를 다루는 스킬 추가 | 명시 요구, 별도 이유는 기록되지 않음 | 사용자 | `harness-architecture-review`, `harness-explain` |
 | D018 | 에이전트 실행·응답시간을 반영해 위임·결과 검증·문서 작성·제출 시간을 배분 | 응답시간을 고려한 위임과 시간 안배도 AI 활용 역량의 일부라는 평가 기준 | 사용자 | `AGENTS.md`, `harness-context`, `harness-verify`, `docs/TOKEN_AND_AGENTS.md`, `docs/MODEL_STRATEGY.md` |
 | D019 | 기능 설계에 정상·예외 흐름과 좋은 문서화 기준을 포함 | 명시 요구, 별도 이유는 기록되지 않음 | 사용자 | `harness-feature-design`, 기능 명세 템플릿, `AGENTS.md` |
+| D020 | 중복 지침을 정리하고 간소화 가능한 부분을 축약 | 중복되거나 간소화 가능한 내용을 한 번 정리해 달라는 요청 | 사용자 | `AGENTS.md`, `README.md`, 구현·검증·설계 검토 스킬, `docs/MODEL_STRATEGY.md` |
 
 D004의 라이브러리 선택은 하네스의 기본 제안이며 특정 제품의 브랜드나 테마가 확정됐다는
 뜻은 아닙니다. D011의 읽기 제한은 IAM/RBAC를 대체하지 않습니다. 실제 AI 사용·테스트
